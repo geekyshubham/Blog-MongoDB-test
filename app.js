@@ -26,25 +26,29 @@ const postSchema = {
 
 const Post = mongoose.model("Post", postSchema);
 
-Post.find({}, function(err, posts){
 
-  res.render("home", {
 
-    startingContent: homeStartingContent,
+app.get("/home", function(req, res){
+  Post.find({}, function(err, posts){
 
-    posts: posts
-
-    });
-
-})
-
-app.get("/", function(req, res){
-  res.render("home", {
-    startingContent: homeStartingContent,
-    posts: Post
-    });
+    res.render("home", {
+  
+      startingContent: homeStartingContent,
+  
+      posts: posts
+  
+      });
+  
+  })
 });
 
+app.get("/",function(req,res){
+  res.render("login")
+});
+
+app.get("/register",function(req,res){
+  res.render("signup")
+});
 
 app.get("/compose", function(req, res){
   res.render("compose");
@@ -57,25 +61,31 @@ app.post("/compose", function(req, res){
     content: req.body.postBody
   });
 
-  post.save();
+post.save(function(err){
+  if(err){
+  res.redirect("/");
+  }
+});
 
   res.redirect("/");
 
 });
 
-app.get("/posts/:postName", function(req, res){
-  const requestedTitle = _.lowerCase(req.params.postName);
+app.get("/posts/:postID", function(req, res){
+  const requestedID = req.params.postID;
 
-  posts.forEach(function(post){
-    const storedTitle = _.lowerCase(post.title);
-
-    if (storedTitle === requestedTitle) {
-      res.render("post", {
-        title: post.title,
-        content: post.content
-      });
-    }
+  Post.findById(requestedID,function(err,Post){
+ if(!err){
+  res.render("post", {
+    title: Post.title,
+    content: Post.content
   });
+ }
+ else{(res.render("error404"))
+
+}
+    
+  })
 
 });
 

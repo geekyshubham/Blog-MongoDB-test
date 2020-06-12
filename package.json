@@ -4,9 +4,9 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node bin/www.js",
-    "dev": "nodemon -r dotenv/config bin/www.js"
+    "test": "echo \"Welcome Shubham\" && exit 1",
+    "start": "node app.js",
+    "dev": "nodemon -r app.js"
   },
   "author": "",
   "license": "ISC",
